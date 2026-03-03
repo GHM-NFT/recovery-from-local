@@ -1,0 +1,89 @@
+Metadata & schema (add to manifest)
+	•	animation_url (for your NFT Video variants) and image (poster/cover).
+	•	media_mime & media_bytes (helps marketplaces render + for QA).
+	•	background_color (hex) if you want consistent tiles on marketplaces.
+	•	language / locale (future-proof for translations).
+	•	alt_text / accessibility_caption (good UX and boosts SEO on your site).
+	•	attributes hygiene:
+	◦	Lock a canonical, case-consistent trait taxonomy (e.g., Series, Character, Frame, Palette, Edition_Type= Mythic Icon / Signature).
+	◦	Add a License_URL attribute (you already planned) and keep external_url to a per-token page.
+	◦	Add Print_Eligible (bool) and Physical_Redeemable (bool) for your physicals flow.
+	◦	Add Provenance_Commitment (hash—see below).
+Smart contract & chain choices (put in Control sheet)
+	•	Standard: ERC-721 for 1/1 and unique pieces; ERC-1155 for shared editions (e.g., Signature 8, 10K video variants).
+	•	EIP-2981 royalties set at contract-level and token overrides; track exact bps in sheet. (Resale enforcement is market-dependent, but still define your intent.)
+	•	Chain/L2 column (Ethereum vs Polygon/Base) + Estimated Gas per mint for ops planning.
+	•	Operator filter (on/off)—document your stance so listings work everywhere.
+	•	Freeze metadata? Decide if/when you’ll “finalize” CIDs; add a Freeze_Date column.
+Provenance, reveal & edition logic (add to manifest)
+	•	Provenance hash: pre-commit a SHA-256 of the ordered media list; store in sheet & on-chain field if available.
+	•	Reveal plan: Instant vs Delayed Reveal. If delayed, add Reveal_Block/Reveal_Date and a Pre-reveal_Placeholder_CID.
+	•	Edition math: columns for Edition_Size, Token_Range, Edition_Label.
+	•	Burn/redeem mechanics: add Burnable (bool) and Redeem_Target (e.g., “Certificate”, “Framed Print”).
+	•	Allowlist/claim: Claim_Start/End, Per-wallet cap, Allowlist source (CSV/Merkle), Reserve supply(team/treasury).
+Storage & delivery (update file structure + sheet)
+	•	Primary storage: IPFS CIDs for image and (if used) animation_url.
+	•	Redundant pinning: Pinata/Web3.Storage—track Pin_Status and Gateway_QA.
+	•	Derivatives: keep /master, /marketplace_optimized (e.g., max 4096px, ≤50MB video), /thumbs folders; store Thumb_URL in sheet for your site.
+	•	Checksum columns: MD5/SHA-256 for each media file to catch mismatches.
+	•	Aspect & duration: Aspect_Ratio, FPS, Duration_ms for videos—handy for marketplaces & social cuts.
+Unlockables & token-gating (sheet + site integration)
+	•	Unlockable type: (VR_MetaGallery, Certificate, High-res_TIFF, etc.).
+	•	Delivery method:
+	◦	Token-gated page on your site (wallet-check)
+	◦	Encrypted link via Lit Protocol (optional)
+	◦	Manual fulfilment (for physicals)
+	•	Collector data capture: Shipping_Required (Y/N), Redemption_Window, Claims_Remaining.
+	•	Post-purchase comms: Collector_Onboarding_URL and Support_Email fields.
+Visual system & taxonomy (manifest)
+	•	Reflect your Poseidon structure: Character_Variant (Poseidon A/B), Frame_Style, Colorway, Finish (e.g., “Round Canvas”), Series_Arc (e.g., “Sea Deities”).
+	•	Rarity intents: optional Rarity_Tier to guide metadata sorting (even if not used for true random rarity).
+Licensing & legal (control sheet + website)
+	•	License type (Personal / Commercial-Limited / CC-BY-NC, etc.) + License_URL (already planned).
+	•	Terms of Sale URL + Physical Redemption Terms URL.
+	•	Artist moral rights statement (esp. for fine-art positioning).
+	•	Third-party rights cleared? (fonts, textures, myths iconography—generally fine, but track any sourced elements).
+Marketplace & web presence (control sheet)
+	•	Primary mint platform (Manifold, Zora, custom) and Marketplace targets (OpenSea, Blur, Foundation, etc.).
+	•	Canonical collection slug per venue and Verification status.
+	•	SEO fields for your per-token pages: meta_title, meta_description, og_image.
+	•	ENS / domain you’ll surface (e.g., godsheroesmyths.eth) to strengthen provenance.
+Pricing & release ops (control sheet)
+	•	Price strategy: native + target fiat; note Dynamic_Pricing if any (phased tiers, Dutch auction).
+	•	Supply plan: batch schedule by Series; Mint_Window and Press/Content schedule link.
+	•	Treasury splits: add Split_Addresses and Percentages if collaborators are paid on-chain.
+QA & compliance gates (checklist tab)
+	•	CID resolves on public gateways (2+).
+	•	All JSON validates (run a linter) and renders on OpenSea test page.
+	•	Thumbnails load, video autoplays, and file sizes under marketplace limits.
+	•	Royalties recognized by OpenSea/Blur (spot-check).
+	•	Unlockables gated correctly (test with burner wallet).
+	•	Per-token page loads, license link works, alt text present.
+	•	Backup of sheet, media, and contract ABIs in versioned storage.
+
+Minimal metadata snippet (for your JSON)
+
+
+{
+  "name": "Poseidon – Signature #07",
+  "description": "From the Gods Heroes Myths collection…",
+  "image": "ipfs://<poster_cid>",
+  "animation_url": "ipfs://<video_cid>",
+  "external_url": "https://godsheroesmyths.com/token/poseidon-07",
+  "attributes": [
+    {"trait_type": "Series", "value": "Sea Deities"},
+    {"trait_type": "Character", "value": "Poseidon"},
+    {"trait_type": "Character_Variant", "value": "B"},
+    {"trait_type": "Frame_Style", "value": "Aegean Ornate"},
+    {"trait_type": "Colorway", "value": "Storm Teal"},
+    {"trait_type": "Edition_Type", "value": "Signature"},
+    {"trait_type": "License", "value": "https://…/LICENSE.txt"}
+  ],
+  "background_color": "0A0A0A"
+}
+
+
+Where this plugs into your current docs
+	•	Master Control sheet: add sections/columns marked above (royalties, chain, reveal, pricing, fulfilment, comms).
+	•	Master Manifest: lock the trait taxonomy + file pointers (CIDs, checksums, alt text, media specs, provenance hash).
+	•	File structure: ensure /masters, /marketplace_optimized, /thumbs, /json, /proofs (provenance + ABIs) folders.
